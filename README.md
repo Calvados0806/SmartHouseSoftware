@@ -1,2 +1,2 @@
-# Smart Wallet
+# SmartHouseSoftware
 ![alt text](./Logo.png)
