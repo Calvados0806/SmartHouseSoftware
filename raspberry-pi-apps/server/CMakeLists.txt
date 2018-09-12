@@ -1,0 +1,20 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(mcp_server)
+
+IF(NOT UNIX)
+    MESSAGE(FATAL_ERROR "------- Can`t build project on not UNIX system -------")
+ENDIF(NOT UNIX)
+
+IF(${BUILD_TYPE} STREQUAL Debug)
+    OPTION(Debug "user choos debug" ON)
+ELSEIF(${BUILD_TYPE} STREQUAL Release)
+    OPTION(Release "user choos release" ON)
+ELSE()
+    MESSAGE(FATAL_ERROR "------- Invalid build type -------")
+ENDIF()
+
+IF(Debug)
+   ADD_DEFINITIONS(" -O0 -ggdb -Wall -std=c++98 ")
+ELSE()
+   ADD_DEFINITIONS(" -O2 -Wall -Werror -std=c++98 ")
+ENDIF(Debug)
