@@ -2,7 +2,29 @@
 #define UTILS_H
 
 #include <fcntl.h>
+#include <sys/socket.h>
+#include <sys/epoll.h>
+#include <netinet/in.h>
 
+/*
+*  Struct contains useful information
+*  about socket
+*/
+struct socket_inf
+{
+    int fd;
+    struct sockaddr_in addinfo;
+};
+
+/*
+*  Struct contains useful information
+*  about epoll object
+*/
+struct epoll_inf
+{
+    int id;
+    struct epoll_event ev;
+};
 
 /*
 *  Make socket non blocked
