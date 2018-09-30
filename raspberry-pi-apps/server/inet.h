@@ -23,4 +23,18 @@ struct socket_inf* create_mcpsocket(const char* addr, short port);
 */
 struct epoll_inf*  create_epollinf(struct socket_inf* socket, uint32_t event_mode);
 
+/*
+*
+*  Shutdowns socket file descriptor.
+*
+*  @param socket - socket object
+*  @param how - close mode
+*  @return - status code
+*/
+inline int shutdown_mcpsocket(struct socket_inf* socket, int how)
+{
+    shutdown(socket->fd, how);
+    close(socket->fd);
+}
+
 #endif // INET_H
