@@ -37,4 +37,12 @@ inline int shutdown_mcpsocket(struct socket_inf* socket, int how)
     close(socket->fd);
 }
 
+/*
+*  Connects to socket and registers in epoll
+*
+*  @param socket - master socket object
+*  @param epoll_obj - epoll obj
+*/
+void handle_master(struct socket_inf* socket, struct epoll_inf* epoll_obj);
+
 #endif // INET_H
