@@ -30,15 +30,3 @@ struct epoll_inf*  create_epollinf(struct socket_inf* socket, uint32_t event_mod
 
     return einf;
 }
-
-void handle_master(struct socket_inf* sock, struct epoll_inf* epll)
-{
-    int sfd = accept(sock->fd, NULL, NULL);
-    set_nonblock(sfd);
-
-    struct epoll_event new_event;
-    new_event.data.fd = sfd;
-    new_event.events  = EPOLLIN | EPOLLOUT;
-
-    epoll_ctl(epll->id, EPOLL_CTL_ADD, sfd, &new_event);
-}

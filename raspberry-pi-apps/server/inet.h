@@ -8,7 +8,7 @@
 *
 *  @param addr - ipv4 address
 *  @param port - computer port for server
-*  @return - pointer to socket_inf structure,
+*  @return - pointer to socket_inf object,
 *            defined in "utils.h" (needful operator delete)
 */
 struct socket_inf* create_mcpsocket(const char* addr, short port);
@@ -18,10 +18,22 @@ struct socket_inf* create_mcpsocket(const char* addr, short port);
 *
 *  @param socket - socket object
 *  @param event_mode - event`s mode number
-*  @return - pointer to epoll_inf structure,
+*  @return - pointer to epoll_inf object,
 *            defined in "utils.h" (needful operator delete)
 */
 struct epoll_inf*  create_epollinf(struct socket_inf* socket, uint32_t event_mode);
+
+/*
+*
+*  Registers epoll_inf object to handle events
+*
+*  @param socket - socket object
+*  @param epollinf - epoll object bounded with this socket
+*/
+inline void register_epollinf(struct socket_inf* socket, struct epoll_inf* epollinf)
+{
+    epoll_ctl(epollinf->id, EPOLL_CTL_ADD, socket->fd, &epollinf->ev);
+}
 
 /*
 *
@@ -36,13 +48,5 @@ inline int shutdown_mcpsocket(struct socket_inf* socket, int how)
     shutdown(socket->fd, how);
     close(socket->fd);
 }
-
-/*
-*  Connects to socket and registers in epoll
-*
-*  @param socket - master socket object
-*  @param epoll_obj - epoll obj
-*/
-void handle_master(struct socket_inf* socket, struct epoll_inf* epoll_obj);
 
 #endif // INET_H
