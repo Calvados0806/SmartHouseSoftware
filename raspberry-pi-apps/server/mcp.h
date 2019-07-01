@@ -3,9 +3,9 @@
 
 #include "inet.h"
 
-typedef void (*mcp_callback_t)(struct socket_inf* server_sock,
-                               struct epoll_inf* epollinf,
-                               struct epoll_event events[],
+typedef void (*mcp_callback_t)(const struct socket_inf* server_sock,
+                               const struct epoll_inf* epollinf,
+                               const struct epoll_event events[],
                                size_t events_size);
 
 /*

@@ -13,6 +13,8 @@ struct socket_inf* create_mcpsocket(const char* addr, short port)
     sinf->addinfo.sin_port = htons(port);
     sinf->addinfo.sin_addr.s_addr = inet_addr(addr);
 
+    set_nonblock(sinf->fd);
+
     return sinf;
 }
 
@@ -29,4 +31,23 @@ struct epoll_inf*  create_epollinf(struct socket_inf* socket, uint32_t event_mod
     einf->epoll_event.events = event_mode;
 
     return einf;
+}
+
+struct socket_inf* mcp_accept(struct socket_inf* server_sock, struct epoll_inf* server_epoll)
+{
+    struct socket_inf* ret = new struct socket_inf;
+    socklen_t size;
+
+    ret->fd = accept(masterfd, (struct sockaddr*)(&ret->addinfo), &size);
+    if (-1 == ret->fd) {
+        delete ret;
+        return NULL;
+    }
+    set_nonblock(ret->fd);
+
+    struct epoll_event new_event;
+    new_event.data.fd = ret->fd;
+    new_event.events = EPOLLIN | EPOLLOUT;
+
+    epoll_ctl(server_epoll->id, EPOLL_CTL_ADD, ret->fd, &new_event);
 }

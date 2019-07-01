@@ -23,6 +23,70 @@ struct socket_inf* create_mcpsocket(const char* addr, short port);
 */
 struct epoll_inf*  create_epollinf(struct socket_inf* socket, uint32_t event_mode);
 
+
+/*
+*
+*  Accepts new connections
+*
+*  @param server_sock - server socket object
+*  @param server_epoll - server epoll object
+*  @return - pointer to client server object
+*/
+struct socket_inf* mcp_accept(struct socket_inf* server_sock, struct epoll_inf* server_epoll);
+
+/*
+*
+*  Sends data to client
+*
+*  @param client_sock - client socket object
+*  @param buffer - data buffer
+*  @param bufflen - buffer size
+*  @return - how much bytes was sent, -1 on error
+*/
+inline int mcp_send(struct socket_inf* client_sock, void *buffer, int bufflen)
+{
+    return send(client_sock->fd, buffer, bufflen, MSG_NOSIGNAL);
+}
+
+/*
+*
+*  Receives data from client
+*
+*  @param client_sock - client socket object
+*  @param buffer - data buffer
+*  @param bufflen - buffer size
+*  @return - how much bytes was received, -1 on error
+*/
+inline int mcp_receive(struct socket_inf* client_sock, void *buffer, int bufflen)
+{
+    return recv(client_sock->fd, buffer, bufflen, MSG_NOSIGNAL);
+}
+
+/*
+*
+*  Binds socket to address and port
+*
+*  @param socket - socket object
+*  @return - zero on success, -1 on error
+*/
+inline int mcp_bind(struct socket_inf* socket)
+{
+    return bind(socket->fd, reinterpret_cast<struct sockaddr *>(&socket->addinfo),
+                sizeof socket->addinfo);
+}
+
+/*
+*
+*  listens socket
+*
+*  @param socket - socket object
+*  @return - zero on success, -1 on error
+*/
+inline void mcp_listen(struct socket_inf* socket, int count)
+{
+    listen(socket->fd, count);
+}
+
 /*
 *
 *  Registers epoll_inf object to handle events
